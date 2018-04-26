@@ -1,0 +1,1 @@
+alert("My project for js automation trainings");
