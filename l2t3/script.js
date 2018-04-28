@@ -28,6 +28,13 @@ function calculateRepsQuantity(sourceArray) {
     console.log("Calculating numbers quantity: " + calculateRepsQuantity(sourceArray));
 }
 
-var arr = [ 1, 2, 1, 2, 3.14, 4, 2, 1];
-calculateRepsQuantity(arr);
+var arr1 = [ 1, 2, 1, 2, 3.14, -4, 2, 1];
+var arr2 = [ 15, -4, 2, -14.3, 2.41, 7, 1, 0];
+var arr3 = [ -1, 9, 4, 2, 0, 11, -2, -17];
+var arr4 = [ 3, 6, 13, -2, -6.9, 3, 0, 8];
+
+calculateRepsQuantity(arr1);
+calculateRepsQuantity(arr2);
+calculateRepsQuantity(arr3);
+calculateRepsQuantity(arr4);
 

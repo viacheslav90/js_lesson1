@@ -1,126 +1,99 @@
 function addTodoItem (todoItem) {
-    if (validateTodoID(todoItem.id).valid === false)
-        return validateTodoID(todoItem.id).message;
-    if (validateTodoText(todoItem.text).valid === false)
-        return validateTodoText(todoItem.text).message;
-    if (validateTodoCompleted(todoItem.completed).valid === false)
-        return validateTodoCompleted(todoItem.completed).message;
+    if (!validateTodoID(todoItem.id) ||
+        !validateTodoText(todoItem.text) ||
+        validateTodoCompleted(todoItem.completed) ||
+        Object.keys(todoItem).length !== 3)
+        return false;
     else {
-        var newTodoItem = TodoItem(todoItem.text, todoItem.completed, todoItem.id)
-        todoItems.push(newTodoItem);
+        todoItems.push(todoItem);
+        return true;
     }
 }
 
 
 function viewTodoList (itemsType) {
 
-    var filteredTodoList = [];
-
     switch (itemsType) {
+
         case "completed":
-            for (var i = 0; i < todoItems.length; i++) {
-                if (todoItems[i].completed === true)
-                    filteredTodoList.push(todoItems[i]);
-            }
-            return filteredTodoList;
+            return todoItems.filter(function (element) {
+                return element.completed === true;
+            });
             break;
+
         case "not_completed":
-            for (var i = 0; i < todoItems.length; i++) {
-                if (todoItems[i].completed === false)
-                    filteredTodoList.push(todoItems[i]);
-            }
-            return filteredTodoList;
+            return todoItems.filter(function (element) {
+                return element.completed === false;
+            });
             break;
+
         case "all":
             return todoItems;
             break;
+
         default:
-            var message = "Enter one of valid types: completed, not_completed, all";
-            return message;
+            return false;
             break;
     }
 }
 
 
-function editTodoItem(todoItemId, newText) {
-        var index = getTodoIndexById(todoItemId);
-        if (index !== false) {
-            validateTodoText(newText);
-            todoItems[index].text = newText;
-        }
-}
-
-
-function deleteTodoItem(todoItemId) {
+function editTodoItem (todoItemId, newText) {
     var index = getTodoIndexById(todoItemId);
-    if (index !== false)
-        todoItems = todoItems.filter(function (element) {
-            return todoItems.indexOf(element) !== index;
-        });
+    if (index !== false) {
+        if(!validateTodoText(newText))
+            return false;
+        todoItems[index].text = newText;
+        return true;
+    }
+    return false;
 }
 
 
-function completeTodoItem(todoItemId) {
-        var index = getTodoIndexById(todoItemId);
-        if (index !== false)
-            todoItems[index].completed = true;
+function deleteTodoItem (todoItemId) {
+    var index = getTodoIndexById(todoItemId);
+    if (index !== false) {
+        todoItems.splice(index, 1);
+            return true;
+    }
+    return false
 }
 
 
-function validateTodoID(todoID) {
+function completeTodoItem (todoItemId) {
+    var index = getTodoIndexById(todoItemId);
+    if (index !== false) {
+        if (!validateTodoCompleted(todoItemId))
+            return false;
+        todoItems[index].completed = true;
+        return true;
+    }
+    return false;
+}
 
-    var message = "valid";
 
+function validateTodoID (todoID) {
+    if (typeof todoID === "undefined" ||
+        !Number.isInteger(todoID) ||
+        todoID < 0)
+        return false;
     for (var i = 0; i < todoItems.length; i++) {
-        if (todoItems[i].id === todoID ) {
-            message = "TODO item with such id is exists";
-            return {valid: false, message: message};
-        }
+        if (todoItems[i].id === todoID)
+            return false;
     }
-
-    if (typeof todoID === "undefined") {
-        message = "Not all required field are present";
-        return {valid: false, message: message};
-    }
-
-    if (!Number.isInteger(todoID)) {
-        message = "Please enter correct TODO id";
-        return {valid: false, message: message};
-    }
-    return {valid: true, message: message};
+    return true;
 }
 
 
-function validateTodoText(todoText) {
-    var message = "valid";
-    if (todoText === "") {
-        message = "TODO text can't be blank";
-        return {valid: false, message: message};
-    }
-
-    if (typeof todoText === "undefined") {
-        message = "Not all required field are present";
-        return {valid: false, message: message};
-    }
-
-    return {valid: true, message: message};
+function validateTodoText (todoText) {
+    if (todoText === "" ||
+        typeof todoText === "undefined")
+        return false;
+    return true;
 }
-
 
 function validateTodoCompleted(todoCompleted) {
-
-    var message = "valid";
-
-    if (typeof todoCompleted === "undefined") {
-        message = "Not all required field are present";
-        return {valid: false, message: message};
-    }
-
-    if (!typeof(todoCompleted) === "boolean") {
-        message = "Compete field is incorrect";
-        return {valid: false, message: message};
-    }
-    return {valid: true, message: message};
+    return todoCompleted !== false;
 }
 
 
@@ -133,13 +106,8 @@ function getTodoIndexById(todoID) {
 }
 
 
-function TodoItem(text, completed, id) {
-    return {
-        "text": text,
-        "completed": completed,
-        "id": id
-    }
+function TodoItem(id, text) {
+    this.id = id;
+    this.text = text;
+    this.completed = false;
 }
-
-
-var todoItems = [];

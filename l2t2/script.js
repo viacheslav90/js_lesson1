@@ -1,4 +1,6 @@
-var arr = [ 1, 2, 1, 2, 3.14, 4, 2, 1];
+var arr1 = [ 1, 2, 1, 2, 3.14, 4, 2, 1];
+var arr2 = [ 1, 2, 3, 4, 5, 6, 7, 8, 9];
+var arr3 = [ -1, -1, 0, -1, 2, 0, -1, 2];
 
 function calculateRepsQuantity(sourceArray) {
 
@@ -16,6 +18,8 @@ function calculateRepsQuantity(sourceArray) {
     return resultArray;
 }
 
-console.log("Calculating numbers quantity: " + calculateRepsQuantity(arr));
+console.log("Calculating numbers quantity: " + calculateRepsQuantity(arr1));
+console.log("Calculating numbers quantity: " + calculateRepsQuantity(arr2));
+console.log("Calculating numbers quantity: " + calculateRepsQuantity(arr3));
 
 

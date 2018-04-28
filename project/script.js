@@ -1,1 +1,1 @@
-alert("My project for js automation trainings");
+var todoItems = [];
