@@ -10,33 +10,26 @@ function addTodoItem (todoItem) {
     }
 }
 
-
 function viewTodoList (itemsType) {
-
     switch (itemsType) {
-
         case "completed":
             return todoItems.filter(function (element) {
                 return element.completed === true;
             });
             break;
-
         case "not_completed":
             return todoItems.filter(function (element) {
                 return element.completed === false;
             });
             break;
-
         case "all":
             return todoItems;
             break;
-
         default:
             return false;
             break;
     }
 }
-
 
 function editTodoItem (todoItemId, newText) {
     var index = getTodoIndexById(todoItemId);
@@ -49,7 +42,6 @@ function editTodoItem (todoItemId, newText) {
     return false;
 }
 
-
 function deleteTodoItem (todoItemId) {
     var index = getTodoIndexById(todoItemId);
     if (index !== false) {
@@ -58,7 +50,6 @@ function deleteTodoItem (todoItemId) {
     }
     return false
 }
-
 
 function completeTodoItem (todoItemId) {
     var index = getTodoIndexById(todoItemId);
@@ -70,7 +61,6 @@ function completeTodoItem (todoItemId) {
     }
     return false;
 }
-
 
 function validateTodoID (todoID) {
     if (typeof todoID === "undefined" ||
@@ -84,7 +74,6 @@ function validateTodoID (todoID) {
     return true;
 }
 
-
 function validateTodoText (todoText) {
     if (todoText === "" ||
         typeof todoText === "undefined")
@@ -96,7 +85,6 @@ function validateTodoCompleted(todoCompleted) {
     return todoCompleted !== false;
 }
 
-
 function getTodoIndexById(todoID) {
     for (var i = 0; i < todoItems.length; i++) {
         if (todoItems[i].id === todoID)
@@ -104,7 +92,6 @@ function getTodoIndexById(todoID) {
     }
     return false;
 }
-
 
 function TodoItem(id, text) {
     this.id = id;
