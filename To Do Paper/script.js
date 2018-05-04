@@ -1,1 +1,1 @@
-var todoItems = [];
+let todoItems = [];

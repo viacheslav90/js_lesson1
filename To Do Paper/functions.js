@@ -1,100 +1,96 @@
 function addTodoItem (todoItem) {
-    if (!validateTodoID(todoItem.id) ||
-        !validateTodoText(todoItem.text) ||
-        validateTodoCompleted(todoItem.completed) ||
-        Object.keys(todoItem).length !== 3)
+    if (!validateTodoID(todoItem.getID()) || !validateTodoText(todoItem.getText()))
         return false;
-    else {
-        todoItems.push(todoItem);
-        return true;
-    }
+    todoItems.push(todoItem);
+    todoItem.todoItemsChangeListener();
+    return true;
 }
 
 function viewTodoList (itemsType) {
     switch (itemsType) {
         case "completed":
-            return todoItems.filter(function (element) {
-                return element.completed === true;
-            });
-            break;
+            return todoItems.filter(element => (element.getCompleted() === true));
         case "not_completed":
-            return todoItems.filter(function (element) {
-                return element.completed === false;
-            });
-            break;
+            return todoItems.filter(element => (element.getCompleted() === false));
         case "all":
             return todoItems;
-            break;
         default:
             return false;
-            break;
     }
 }
 
 function editTodoItem (todoItemId, newText) {
-    var index = getTodoIndexById(todoItemId);
-    if (index !== false) {
-        if(!validateTodoText(newText))
-            return false;
-        todoItems[index].text = newText;
-        return true;
-    }
+    const index = getTodoIndexById(todoItemId);
+    if (index !== false)
+        return todoItems[index].setText(newText);
     return false;
 }
 
 function deleteTodoItem (todoItemId) {
-    var index = getTodoIndexById(todoItemId);
+    const index = getTodoIndexById(todoItemId);
     if (index !== false) {
         todoItems.splice(index, 1);
-            return true;
+        return true;
     }
     return false
 }
 
 function completeTodoItem (todoItemId) {
-    var index = getTodoIndexById(todoItemId);
+    const index = getTodoIndexById(todoItemId);
     if (index !== false) {
-        if (!validateTodoCompleted(todoItemId))
-            return false;
-        todoItems[index].completed = true;
+        todoItems[index].setCompletedTrue();
         return true;
     }
     return false;
 }
 
 function validateTodoID (todoID) {
-    if (typeof todoID === "undefined" ||
-        !Number.isInteger(todoID) ||
-        todoID < 0)
-        return false;
-    for (var i = 0; i < todoItems.length; i++) {
-        if (todoItems[i].id === todoID)
-            return false;
-    }
-    return true;
+    return !(typeof todoID === "undefined" || !Number.isInteger(todoID) || todoID < 0 || getTodoIndexById(todoID));
 }
 
 function validateTodoText (todoText) {
-    if (todoText === "" ||
-        typeof todoText === "undefined")
-        return false;
-    return true;
-}
-
-function validateTodoCompleted(todoCompleted) {
-    return todoCompleted !== false;
+    return !(todoText === "" || typeof todoText === "undefined");
 }
 
 function getTodoIndexById(todoID) {
-    for (var i = 0; i < todoItems.length; i++) {
-        if (todoItems[i].id === todoID)
-            return i;
-    }
-    return false;
+    let index = false;
+    todoItems.forEach(element => {
+       if (element.getID() === todoID)
+           return index = todoItems.indexOf(element);
+    });
+    return index;
 }
 
 function TodoItem(id, text) {
-    this.id = id;
-    this.text = text;
-    this.completed = false;
+    this._id = id;
+    this._text = text;
+    this._completed = false;
+    this.getID = () => ( this._id );
+    this.getText = () => ( this._text );
+    this.getCompleted = () => ( this._completed );
+    this.setText = newText => {
+        if(!validateTodoText(newText))
+            return false;
+        todoItems[getTodoIndexById(this.getID())]._text = newText;
+        return true;
+    };
+    this.setCompletedTrue = () => { this._completed = true };
+    this.todoItemsChangeListener = () => {
+        console.log(todoItems);
+    }
 }
+
+
+
+
+
+
+const todo1 = new TodoItem(1, "item1");
+const todo2 = new TodoItem(2, "item2");
+const todo3 = new TodoItem(3, "item3");
+const todo4 = new TodoItem(4, "item4");
+
+addTodoItem(todo1);
+addTodoItem(todo2);
+addTodoItem(todo3);
+addTodoItem(todo4);
