@@ -54,9 +54,9 @@ function validateTodoText (todoText) {
 
 function getTodoIndexById(todoID) {
     let index = false;
-    todoItems.forEach(element => {
-       if (element.getID() === todoID)
-           return index = todoItems.indexOf(element);
+    todoItems.some((el, i) => {
+       if (el.getID() === todoID)
+           index = i;
     });
     return index;
 }
