@@ -1,0 +1,27 @@
+[
+  {
+    "id": 1,
+    "text": "buy food",
+    "completed": "false"
+  },
+  {
+    "id": 2,
+    "text": "wash clothes",
+    "completed": "false"
+  },
+  {
+    "id": 3,
+    "text": "sleep",
+    "completed": "false"
+  },
+  {
+    "id": 4,
+    "text": "run",
+    "completed": "false"
+  },
+  {
+    "id": 5,
+    "text": "write code",
+    "completed": "false"
+  }
+]

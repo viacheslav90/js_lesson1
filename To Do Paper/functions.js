@@ -1,8 +1,7 @@
 function addTodoItem (todoItem) {
-    if (!validateTodoID(todoItem.getID()) || !validateTodoText(todoItem.getText()))
+    if (!validateTodoID((todoItem.getID() || !validateTodoText(todoItem.getText()))))
         return false;
     todoItems.push(todoItem);
-    todoItem.todoItemsChangeListener();
     return true;
 }
 
@@ -54,9 +53,9 @@ function validateTodoText (todoText) {
 
 function getTodoIndexById(todoID) {
     let index = false;
-    todoItems.forEach(element => {
-       if (element.getID() === todoID)
-           return index = todoItems.indexOf(element);
+    todoItems.forEach((el, i) => {
+       if (el.getID() === todoID)
+           return index = i;
     });
     return index;
 }
@@ -72,25 +71,22 @@ function TodoItem(id, text) {
         if(!validateTodoText(newText))
             return false;
         todoItems[getTodoIndexById(this.getID())]._text = newText;
+        console.log(todoItems);
         return true;
     };
-    this.setCompletedTrue = () => { this._completed = true };
-    this.todoItemsChangeListener = () => {
+    this.setCompletedTrue = () => {
+        this._completed = true;
         console.log(todoItems);
-    }
+    };
 }
 
-
-
-
-
-
-const todo1 = new TodoItem(1, "item1");
-const todo2 = new TodoItem(2, "item2");
-const todo3 = new TodoItem(3, "item3");
-const todo4 = new TodoItem(4, "item4");
-
-addTodoItem(todo1);
-addTodoItem(todo2);
-addTodoItem(todo3);
-addTodoItem(todo4);
+function readTodoItemsFromJSON() {
+    $.getJSON("todo_list.json", () => {
+        console.log("success")
+    }).done(data => {
+        data.forEach((item) => {
+            const todoItem = new TodoItem(item.id, item.text);
+            addTodoItem(todoItem);
+        })
+    });
+}
