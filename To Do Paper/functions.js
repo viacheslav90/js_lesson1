@@ -56,9 +56,8 @@ function getTodoIndexById(todoID) {
     todoItems.forEach((el, i) => {
        if (el.getID() === todoID)
            return index = i;
-    });
     return index;
-}
+})}
 
 function TodoItem(id, text) {
     this._id = id;
