@@ -1,0 +1,44 @@
+button {
+    border: 1px solid #E3E3E3;
+    width: 115px;
+    height: 30px;
+    border-radius: 6px;
+    font-style: normal;
+    font-size: 14px;
+    text-align: center;
+    color: #FFFFFF;
+}
+
+.edit-btn {
+    background-color: #008aff;
+}
+
+.edit-btn:hover{
+    background-color: #0B72CA;
+}
+
+.complete-btn {
+    background-color: #05844C;
+}
+
+.complete-btn:hover {
+    background-color: #056F40;
+}
+
+.delete-btn {
+     background-color: #EA0808;
+ }
+
+.delete-btn:hover {
+    background-color: #C50A0A;
+}
+
+div {
+    font-size: 35px;
+}
+
+.completed {
+    font-style: italic;
+    text-decoration: line-through;
+    color: grey;
+}

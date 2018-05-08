@@ -2,6 +2,7 @@ function addTodoItem (todoItem) {
     if (!validateTodoID((todoItem.getID() || !validateTodoText(todoItem.getText()))))
         return false;
     todoItems.push(todoItem);
+    displayTodoItem(todoItem);
     return true;
 }
 
@@ -20,14 +21,18 @@ function viewTodoList (itemsType) {
 
 function editTodoItem (todoItemId, newText) {
     const index = getTodoIndexById(todoItemId);
-    if (index !== false)
-        return todoItems[index].setText(newText);
+    if (index !== false) {
+        const success = todoItems[index].setText(newText);
+        if (success)
+            return true;
+    }
     return false;
 }
 
 function deleteTodoItem (todoItemId) {
     const index = getTodoIndexById(todoItemId);
     if (index !== false) {
+        deleteTodoFromView(todoItems[index]);
         todoItems.splice(index, 1);
         return true;
     }
@@ -38,6 +43,7 @@ function completeTodoItem (todoItemId) {
     const index = getTodoIndexById(todoItemId);
     if (index !== false) {
         todoItems[index].setCompletedTrue();
+        completeteView(todoItems[index]);
         return true;
     }
     return false;
@@ -53,11 +59,11 @@ function validateTodoText (todoText) {
 
 function getTodoIndexById(todoID) {
     let index = false;
-    todoItems.forEach((el, i) => {
-       if (el.getID() === todoID)
-           return index = i;
+    for (let i = 0; i < todoItems.length; i++)
+        if (todoItems[i].getID() === todoID)
+            return i;
     return index;
-})}
+}
 
 function TodoItem(id, text) {
     this._id = id;
@@ -80,12 +86,10 @@ function TodoItem(id, text) {
 }
 
 function readTodoItemsFromJSON() {
-    $.getJSON("todo_list.json", () => {
-        console.log("success")
-    }).done(data => {
+    $.getJSON("todo_list.json", data => {
         data.forEach((item) => {
             const todoItem = new TodoItem(item.id, item.text);
             addTodoItem(todoItem);
         })
-    });
+    })
 }

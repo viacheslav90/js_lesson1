@@ -5,9 +5,19 @@
     <meta charset="UTF-8">
     <title>My project</title>
     <meta name="author" content="Viacheslav Dontsov"/>
+    <link href='todo.css' rel='stylesheet' type='text/css'>
 </head>
-<body></body>
+<body>
+    <div>
+        <h1>My To Do Paper</h1>
+        <input id="todo-id" type="text">
+        <input id="todo-text" type="text">
+        <button id="add-todo-btn" onclick="addTodo()">Add todo</button>
+    </div>
+    <div id=”todo-items”></div>
+</body>
 <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="dom.js"></script>
 <script src="functions.js"></script>
 <script src="script.js"></script>
 </html>
