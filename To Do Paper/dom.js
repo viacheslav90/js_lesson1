@@ -5,41 +5,43 @@ function displayTodoItem(todoItem) {
     todoItemSpan.setAttribute("id", `todo${todoItem.getID()}`);
 
     const todoDiv = document.createElement("div");
-    todoDiv.setAttribute("class", "text-todo");
+    todoDiv.setAttribute("id", `text-${todoItem.getID()}`);
     todoDiv.innerHTML = `${todoItem.getText()}`;
 
-    const buttonsDiv = document.createElement("div");
-    buttonsDiv.setAttribute("class", "buttons");
+    const btnsDiv = document.createElement("div");
+    btnsDiv.setAttribute("class", "btns");
 
-    const editButton = document.createElement("button");
-    editButton.setAttribute("class", "edit-btn");
-    editButton.setAttribute("onclick", `editView(${todoItem.getID()})`);
-    editButton.innerHTML = "Edit";
+    const editBtn = document.createElement("button");
+    editBtn.setAttribute("id", `edit-${todoItem.getID()}`);
+    editBtn.setAttribute("class", "edit-btn");
+    editBtn.setAttribute("onclick", `editView(${todoItem.getID()})`);
+    editBtn.innerHTML = "Edit";
 
-    const completeButton = document.createElement("button");
-    completeButton.setAttribute("class", "complete-btn");
-    completeButton.setAttribute("onclick", `completeTodoItem(${todoItem.getID()})`);
-    completeButton.innerHTML = "Complete";
+    const completeBtn = document.createElement("button");
+    completeBtn.setAttribute("id", `complete-${todoItem.getID()}`);
+    completeBtn.setAttribute("class", "complete-btn");
+    completeBtn.setAttribute("onclick", `completeTodoItem(${todoItem.getID()})`);
+    completeBtn.innerHTML = "Complete";
 
-    const deleteButton = document.createElement("button");
-    deleteButton.setAttribute("class", "delete-btn");
-    deleteButton.setAttribute("onclick", `deleteTodoItem(${todoItem.getID()})`);
-    deleteButton.innerHTML = "Delete";
+    const deleteBtn = document.createElement("button");
+    deleteBtn.setAttribute("class", `delete-${todoItem.getID()}`);
+    deleteBtn.setAttribute("class", "delete-btn");
+    deleteBtn.setAttribute("onclick", `deleteTodoItem(${todoItem.getID()})`);
+    deleteBtn.innerHTML = "Delete";
 
-
-    buttonsDiv.appendChild(editButton);
-    buttonsDiv.appendChild(completeButton);
-    buttonsDiv.appendChild(deleteButton);
+    btnsDiv.appendChild(editBtn);
+    btnsDiv.appendChild(completeBtn);
+    btnsDiv.appendChild(deleteBtn);
     todoItemSpan.appendChild(todoDiv);
-    todoItemSpan.appendChild(buttonsDiv);
+    todoItemSpan.appendChild(btnsDiv);
 
     if (todoItem.getCompleted() === true) {
-        completeButton.style.display = "none";
-        editButton.style.display = "none";
-        deleteButton.style.display = "none";
+        todoItemsDiv[0].appendChild(todoItemSpan);
+        completeBtn.style.display = "none";
+        editBtn.style.display = "none";
+        deleteBtn.style.display = "none";
         todoItemSpan.setAttribute("class", "completed");
-    }
-    else {
+    } else {
         todoItemsDiv[0].appendChild(todoItemSpan);
         todoItemSpan.setAttribute("class", "not-completed");
     }
@@ -53,53 +55,57 @@ function deleteTodoFromView(todoItem) {
 function completeteView(todoItem) {
     const todoItemSpan = document.getElementById(`todo${todoItem.getID()}`);
     todoItemSpan.setAttribute("class", "completed");
-    const buttons = todoItemSpan.getElementsByTagName("button");
-    for (let i = buttons.length-1; i >= 0; i--)
-        buttons.item(0).remove();
+
+    const btns = todoItemSpan.getElementsByTagName("button");
+
+    for (let i = btns.length-1; i >= 0; i--)
+        btns.item(i).remove();
 
 }
 
 function editView(todoId) {
     const todoItemSpan = document.getElementById(`todo${todoId}`);
-    const todoDiv = todoItemSpan.getElementsByClassName("text-todo");
-    const buttonsDiv = todoItemSpan.getElementsByClassName("buttons");
-    const todoText = todoDiv[0].innerText;
-    todoDiv[0].innerHTML = "";
+    const todoDiv = document.getElementById(`text-${todoId}`);
+    const btnsDiv = todoItemSpan.getElementsByClassName("btns");
+    const todoText = todoDiv.innerText;
+    todoDiv.innerHTML = "";
 
-    const buttons = todoItemSpan.getElementsByTagName("button");
-    for (let i = buttons.length-1; i >= 0; i--)
-        buttons.item(i).style.display = "none";
+    const btns = todoItemSpan.getElementsByTagName("button");
+    for (let i = btns.length-1; i >= 0; i--)
+        btns.item(i).style.display = "none";
 
     const inputTextField = document.createElement("input");
+    inputTextField.setAttribute("id", `input-text-${todoId}`);
     inputTextField.setAttribute("type", "text");
     inputTextField.setAttribute("placeholder", `${todoText}`);
-    todoDiv[0].appendChild(inputTextField);
+    todoDiv.appendChild(inputTextField);
 
-    const saveButton = document.createElement("button");
-    saveButton.setAttribute("class", "save-btn");
-    saveButton.setAttribute("onclick", `getTextAndEdit(${todoId})`);
-    saveButton.innerHTML = "Save";
+    const saveBtn = document.createElement("button");
+    saveBtn.setAttribute("id", `save-${todoId}`);
+    saveBtn.setAttribute("class", "save-btn");
+    saveBtn.setAttribute("onclick", `getTextAndEdit(${todoId})`);
+    saveBtn.innerHTML = "Save";
 
-    buttonsDiv[0].appendChild(saveButton);
+    btnsDiv[0].appendChild(saveBtn);
 }
 
 function getTextAndEdit(todoId) {
     const todoItemSpan = document.getElementById(`todo${todoId}`);
-    const inputField = todoItemSpan.getElementsByTagName("input");
-    let text = inputField[0].value;
+    const inputField = document.getElementById(`input-text-${todoId}`);
+    let text = inputField.value;
     if (text === "")
-        text = inputField[0].getAttribute("placeholder");
+        text = inputField.getAttribute("placeholder");
     const result = editTodoItem(todoId, text);
 
     if (result) {
-        const saveBtn = todoItemSpan.getElementsByClassName("save-btn");
-        saveBtn[0].remove();
-        const todoDiv = todoItemSpan.getElementsByClassName("text-todo");
-        const buttonsDiv = todoItemSpan.getElementsByClassName("buttons");
-        const buttons = buttonsDiv[0].getElementsByTagName("button");
-        todoDiv[0].innerText = text;
-        for (let i = buttons.length-1; i >= 0; i--)
-            buttons.item(i).style.display = "inline";
+        const saveBtn = document.getElementById(`save-${todoId}`);
+        saveBtn.remove();
+        const todoDiv = document.getElementById(`text-${todoId}`);
+        const btnsDiv = todoItemSpan.getElementsByClassName("btns");
+        const btns = btnsDiv[0].getElementsByTagName("button");
+        todoDiv.innerText = text;
+        for (let i = btns.length-1; i >= 0; i--)
+            btns.item(i).style.display = "inline";
     }
 }
 
@@ -110,5 +116,15 @@ function addTodo() {
     const text = todoItemText.value;
     const todo = new TodoItem(id, text);
     addTodoItem(todo);
+}
+
+function displayFilteredItems(todoItems) {
+    const todoItemsDiv = document.getElementsByTagName("div");
+    todoItems.forEach((child) => {
+        console.log(child);
+    });
+    todoItems.forEach(todoItem => {
+        displayTodoItem(todoItem);
+    });
 }
 

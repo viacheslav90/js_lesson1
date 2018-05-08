@@ -8,13 +8,17 @@
     <link href='todo.css' rel='stylesheet' type='text/css'>
 </head>
 <body>
-    <div>
-        <h1>My To Do Paper</h1>
+<h1>My To Do Paper</h1>
+    <span>
+        <button id="show-all-btn" onclick="viewTodoList('all')">All</button>
+        <button id="show-completed-btn" onclick="viewTodoList('completed')">Completed</button>
+        <button id="show-not-completed-btn" onclick="viewTodoList('not_completed')">Not completed</button>
+    </span>
+    <div id=”todo-items”>
         <input id="todo-id" type="text">
         <input id="todo-text" type="text">
         <button id="add-todo-btn" onclick="addTodo()">Add todo</button>
     </div>
-    <div id=”todo-items”></div>
 </body>
 <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 <script src="dom.js"></script>
