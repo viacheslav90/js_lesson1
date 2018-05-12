@@ -44,20 +44,16 @@ function displayTodoItem(todoItem) {
     todoItemSpan.appendChild(btnsDiv);
 
     if (todoItem.getCompleted()) {
-        todoItemsDiv.appendChild(todoItemSpan);
         completeCheckbox.disabled = true;
         completeCheckbox.checked = true;
         editBtn.style.display = "none";
         deleteBtn.style.display = "none";
         todoItemSpan.setAttribute("class", "completed");
-    } else {
         todoItemsDiv.appendChild(todoItemSpan);
+    } else {
         todoItemSpan.setAttribute("class", "not-completed");
+        todoItemsDiv.appendChild(todoItemSpan);
     }
-
-    const allRadio = document.getElementById("show-all");
-    const completedRadio = document.getElementById("show-completed");
-    const notCompletedRadio = document.getElementById("show-not-completed");
 }
 
 function deleteTodoFromView(todoItem) {
