@@ -17,11 +17,19 @@ button {
     background-color: #0B72CA;
 }
 
-.complete-btn {
+.save-btn {
     background-color: #05844C;
 }
 
-.complete-btn:hover {
+.save-btn:hover {
+    background-color: #056F40;
+}
+
+#add-todo-btn {
+    background-color: #05844C;
+}
+
+#add-todo-btn:hover {
     background-color: #056F40;
 }
 

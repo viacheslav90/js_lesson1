@@ -1,11 +1,12 @@
 function displayTodoItem(todoItem) {
-    const todoItemsDiv = document.getElementsByTagName("div");
+    const todoItemsDiv = document.getElementById("todo-items");
 
     const todoItemSpan = document.createElement("span");
     todoItemSpan.setAttribute("id", `todo${todoItem.getID()}`);
 
     const todoDiv = document.createElement("div");
     todoDiv.setAttribute("id", `text-${todoItem.getID()}`);
+    todoDiv.setAttribute("class", "todo-text");
     todoDiv.innerHTML = `${todoItem.getText()}`;
 
     const btnsDiv = document.createElement("div");
@@ -14,47 +15,62 @@ function displayTodoItem(todoItem) {
     const editBtn = document.createElement("button");
     editBtn.setAttribute("id", `edit-${todoItem.getID()}`);
     editBtn.setAttribute("class", "edit-btn");
-    editBtn.setAttribute("onclick", `editView(${todoItem.getID()})`);
+    editBtn.addEventListener('click', () => {
+        editView(todoItem.getID())
+    });
     editBtn.innerHTML = "Edit";
 
-    const completeBtn = document.createElement("button");
-    completeBtn.setAttribute("id", `complete-${todoItem.getID()}`);
-    completeBtn.setAttribute("class", "complete-btn");
-    completeBtn.setAttribute("onclick", `completeTodoItem(${todoItem.getID()})`);
-    completeBtn.innerHTML = "Complete";
+    const completeCheckbox = document.createElement("input");
+    completeCheckbox.setAttribute("type", "checkbox");
+    completeCheckbox.setAttribute("id", `complete-${todoItem.getID()}`);
+    completeCheckbox.setAttribute("class", "complete-btn");
+    completeCheckbox.addEventListener('click', (e) => {
+        if (e.target.checked)
+            completeTodoItem(todoItem.getID());
+    });
 
     const deleteBtn = document.createElement("button");
     deleteBtn.setAttribute("class", `delete-${todoItem.getID()}`);
     deleteBtn.setAttribute("class", "delete-btn");
-    deleteBtn.setAttribute("onclick", `deleteTodoItem(${todoItem.getID()})`);
     deleteBtn.innerHTML = "Delete";
+    deleteBtn.addEventListener('click', function () {
+       deleteTodoItem(todoItem.getID())
+    });
 
+    btnsDiv.appendChild(completeCheckbox);
     btnsDiv.appendChild(editBtn);
-    btnsDiv.appendChild(completeBtn);
     btnsDiv.appendChild(deleteBtn);
     todoItemSpan.appendChild(todoDiv);
     todoItemSpan.appendChild(btnsDiv);
 
-    if (todoItem.getCompleted() === true) {
-        todoItemsDiv[0].appendChild(todoItemSpan);
-        completeBtn.style.display = "none";
+    if (todoItem.getCompleted()) {
+        todoItemsDiv.appendChild(todoItemSpan);
+        completeCheckbox.disabled = true;
+        completeCheckbox.checked = true;
         editBtn.style.display = "none";
         deleteBtn.style.display = "none";
         todoItemSpan.setAttribute("class", "completed");
     } else {
-        todoItemsDiv[0].appendChild(todoItemSpan);
+        todoItemsDiv.appendChild(todoItemSpan);
         todoItemSpan.setAttribute("class", "not-completed");
     }
+
+    const allRadio = document.getElementById("show-all");
+    const completedRadio = document.getElementById("show-completed");
+    const notCompletedRadio = document.getElementById("show-not-completed");
 }
 
 function deleteTodoFromView(todoItem) {
     const todoItemSpan = document.getElementById(`todo${todoItem.getID()}`);
-    todoItemSpan.remove();
+    if (todoItemSpan)
+        todoItemSpan.remove();
 }
 
 function completeteView(todoItem) {
     const todoItemSpan = document.getElementById(`todo${todoItem.getID()}`);
     todoItemSpan.setAttribute("class", "completed");
+    const completeCheckbox = document.getElementById(`complete-${todoItem.getID()}`);
+    completeCheckbox.disabled = true;
 
     const btns = todoItemSpan.getElementsByTagName("button");
 
@@ -73,6 +89,7 @@ function editView(todoId) {
     const btns = todoItemSpan.getElementsByTagName("button");
     for (let i = btns.length-1; i >= 0; i--)
         btns.item(i).style.display = "none";
+    document.getElementById(`complete-${todoId}`).style.display = "none";
 
     const inputTextField = document.createElement("input");
     inputTextField.setAttribute("id", `input-text-${todoId}`);
@@ -106,6 +123,7 @@ function getTextAndEdit(todoId) {
         todoDiv.innerText = text;
         for (let i = btns.length-1; i >= 0; i--)
             btns.item(i).style.display = "inline";
+        document.getElementById(`complete-${todoId}`).style.display = "inline";
     }
 }
 
@@ -118,13 +136,42 @@ function addTodo() {
     addTodoItem(todo);
 }
 
-function displayFilteredItems(todoItems) {
-    const todoItemsDiv = document.getElementsByTagName("div");
-    todoItems.forEach((child) => {
-        console.log(child);
+function displayFilteredItems(filter) {
+    const allRadio = document.getElementById("show-all");
+    const completedRadio = document.getElementById("show-completed");
+    const notCompletedRadio = document.getElementById("show-not-completed");
+    const todoItemsDiv = document.getElementById("todo-items");
+
+    todoItems.forEach((todoItem) => {
+        deleteTodoFromView(todoItem);
     });
-    todoItems.forEach(todoItem => {
-        displayTodoItem(todoItem);
+
+    let status;
+    switch (filter) {
+        case "all":
+            allRadio.checked = true;
+            completedRadio.checked = false;
+            notCompletedRadio.checked = false;
+            break;
+        case "completed":
+            allRadio.checked = false;
+            completedRadio.checked = true;
+            notCompletedRadio.checked = false;
+            status = true;
+            break;
+        case "not_completed":
+            allRadio.checked = false;
+            completedRadio.checked = false;
+            notCompletedRadio.checked = true;
+            status = false;
+            break;
+    }
+
+    if (filter === "all")
+        todoItems.forEach(item => {displayTodoItem(item)});
+    else
+        todoItems.forEach(item => {
+            if (item.getCompleted() === status)
+                displayTodoItem(item);
     });
 }
-

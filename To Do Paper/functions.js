@@ -10,14 +10,14 @@ function viewTodoList (itemsType) {
     switch (itemsType) {
         case "completed":
             const completed = todoItems.filter(element => (element.getCompleted() === true));
-            displayFilteredItems(completed);
+            displayFilteredItems("completed");
             return completed;
         case "not_completed":
             const notCompleted = todoItems.filter(element => (element.getCompleted() === false));
-            displayFilteredItems(notCompleted);
+            displayFilteredItems("not_completed");
             return notCompleted;
         case "all":
-            displayFilteredItems(todoItems);
+            displayFilteredItems("all");
             return todoItems;
         default:
             return false;
